@@ -84,7 +84,8 @@ target_compile_definitions(PlaitsVST PUBLIC
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_DISPLAY_SPLASH_SCREEN=0
-    STMLIB_X86=1)
+    STMLIB_X86=1
+    $<$<CXX_COMPILER_ID:MSVC>:_USE_MATH_DEFINES>)
 
 target_link_libraries(PlaitsVST PRIVATE
     juce::juce_audio_utils
@@ -158,7 +159,9 @@ target_include_directories(PlaitsVSTTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/stmlib)
 
-target_compile_definitions(PlaitsVSTTests PRIVATE STMLIB_X86=1)
+target_compile_definitions(PlaitsVSTTests PRIVATE
+    STMLIB_X86=1
+    $<$<CXX_COMPILER_ID:MSVC>:_USE_MATH_DEFINES>)
 
 target_link_libraries(PlaitsVSTTests PRIVATE gtest_main)
 
