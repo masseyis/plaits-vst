@@ -1,0 +1,41 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+
+# IDE
+.idea/
+.vscode/
+*.xcodeproj/
+*.xcworkspace/
+.vs/
+
+# macOS
+.DS_Store
+*.dSYM/
+
+# JUCE build artifacts
+Builds/
+JuceLibraryCode/
+
+# User data
+*.user
+*.suo
+
+# Compiled files
+*.o
+*.obj
+*.a
+*.lib
+*.dylib
+*.so
+*.dll
+
+# Plugin formats
+*.vst3/
+*.component/
+*.app/
+
+# Test output
+Testing/
+CTestTestfile.cmake
