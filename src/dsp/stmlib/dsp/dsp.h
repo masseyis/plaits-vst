@@ -112,7 +112,7 @@ inline float SoftClip(float x) {
   }
 }
 
-#ifdef TEST
+#ifdef STMLIB_X86
   inline int32_t Clip16(int32_t x) {
     if (x < -32768) {
       return -32768;
@@ -143,8 +143,8 @@ inline float SoftClip(float x) {
     return result;
   }
 #endif
-  
-#ifdef TEST
+
+#ifdef STMLIB_X86
   inline float Sqrt(float x) {
     return sqrtf(x);
   }

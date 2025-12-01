@@ -30,6 +30,8 @@ target_sources(PlaitsVST PRIVATE
     src/PluginProcessor.cpp
     src/PluginEditor.cpp
     src/PresetManager.cpp
+    src/dsp/stmlib/dsp/units.cc
+    src/dsp/stmlib/utils/random.cc
     src/dsp/plaits/resources.cc
     src/dsp/plaits/dsp/voice.cc
     src/dsp/plaits/dsp/engine/additive_engine.cc
@@ -74,13 +76,15 @@ target_sources(PlaitsVST PRIVATE
 
 target_include_directories(PlaitsVST PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/plaits)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/stmlib)
 
 target_compile_definitions(PlaitsVST PUBLIC
     JUCE_WEB_BROWSER=0
     JUCE_USE_CURL=0
     JUCE_VST3_CAN_REPLACE_VST2=0
-    JUCE_DISPLAY_SPLASH_SCREEN=0)
+    JUCE_DISPLAY_SPLASH_SCREEN=0
+    STMLIB_X86=1)
 
 target_link_libraries(PlaitsVST PRIVATE
     juce::juce_audio_utils
@@ -105,6 +109,8 @@ add_executable(PlaitsVSTTests
     test/dsp/EnvelopeTests.cpp
     test/dsp/ResamplerTests.cpp
     test/dsp/PlaitsEngineTests.cpp
+    src/dsp/stmlib/dsp/units.cc
+    src/dsp/stmlib/utils/random.cc
     src/dsp/plaits/resources.cc
     src/dsp/plaits/dsp/voice.cc
     src/dsp/plaits/dsp/engine/additive_engine.cc
@@ -149,7 +155,10 @@ add_executable(PlaitsVSTTests
 
 target_include_directories(PlaitsVSTTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/plaits)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/dsp/stmlib)
+
+target_compile_definitions(PlaitsVSTTests PRIVATE STMLIB_X86=1)
 
 target_link_libraries(PlaitsVSTTests PRIVATE gtest_main)
 

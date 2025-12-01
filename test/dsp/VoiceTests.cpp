@@ -9,7 +9,7 @@ protected:
         voice_.Init(44100.0);
     }
 
-    plaits_vst::Voice voice_;
+    Voice voice_;
 };
 
 TEST_F(VoiceTest, InitialState) {
@@ -78,7 +78,7 @@ TEST_F(VoiceTest, DifferentNotesProduceDifferentPitches) {
     voice_.Process(lowLeft, lowRight, 4096);
 
     // Test with a high note
-    plaits_vst::Voice voice2;
+    Voice voice2;
     voice2.Init(44100.0);
     voice2.set_engine(0);
     voice2.NoteOn(72, 1.0f, 0.0f, 500.0f);  // C5
@@ -116,7 +116,7 @@ TEST_F(VoiceTest, VelocityAffectsAmplitude) {
     }
 
     // Quiet note
-    plaits_vst::Voice quietVoice;
+    Voice quietVoice;
     quietVoice.Init(44100.0);
     quietVoice.NoteOn(60, 0.25f, 0.0f, 500.0f);
 
@@ -143,7 +143,7 @@ TEST_F(VoiceTest, EngineParameterChanges) {
     voice_.Process(left1, right1, 256);
 
     // Change to different engine
-    plaits_vst::Voice voice2;
+    Voice voice2;
     voice2.Init(44100.0);
     voice2.set_engine(5);  // Wavetable
     voice2.NoteOn(60, 1.0f, 0.0f, 500.0f);
@@ -164,7 +164,7 @@ TEST_F(VoiceTest, EngineParameterChanges) {
 
 TEST_F(VoiceTest, AllEnginesWork) {
     for (int engine = 0; engine < 16; ++engine) {
-        plaits_vst::Voice v;
+        Voice v;
         v.Init(44100.0);
         v.set_engine(engine);
         v.NoteOn(60, 1.0f, 0.0f, 500.0f);

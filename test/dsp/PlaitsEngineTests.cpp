@@ -2,6 +2,7 @@
 #include "dsp/voice.h"
 #include <cmath>
 #include <algorithm>
+#include <string>
 
 // Test that all 16 Plaits engines produce valid output
 class PlaitsEngineTest : public ::testing::TestWithParam<int> {
@@ -10,7 +11,7 @@ protected:
         voice_.Init(44100.0);
     }
 
-    plaits_vst::Voice voice_;
+    Voice voice_;
 };
 
 TEST_P(PlaitsEngineTest, EngineProducesOutput) {
@@ -161,20 +162,22 @@ TEST_P(PlaitsEngineTest, EngineHandlesDifferentVelocities) {
     }
 }
 
+// Name generator function for parameterized tests
+std::string GetEngineName(const ::testing::TestParamInfo<int>& info) {
+    const char* names[] = {
+        "VA", "Waveshaper", "FM", "Grain", "Additive", "Wavetable",
+        "Chord", "Speech", "Swarm", "Noise", "Particle", "String",
+        "Modal", "BassDrum", "Snare", "HiHat"
+    };
+    return std::string(names[info.param]);
+}
+
 // Instantiate tests for all 16 engines
 INSTANTIATE_TEST_SUITE_P(
     AllEngines,
     PlaitsEngineTest,
     ::testing::Range(0, 16),
-    [](const ::testing::TestParamInfo<int>& info) {
-        const char* names[] = {
-            "VA", "Waveshaper", "FM", "Grain", "Additive", "Wavetable",
-            "Chord", "Speech", "Swarm", "Noise", "Particle", "String",
-            "Modal", "BassDrum", "Snare", "HiHat"
-        };
-        return names[info.param];
-    }
-);
+    GetEngineName);
 
 // Additional engine-specific tests
 class EngineSpecificTest : public ::testing::Test {
@@ -183,7 +186,7 @@ protected:
         voice_.Init(44100.0);
     }
 
-    plaits_vst::Voice voice_;
+    Voice voice_;
 };
 
 TEST_F(EngineSpecificTest, DrumEnginesProducePercussiveEnvelopes) {

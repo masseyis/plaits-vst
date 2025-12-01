@@ -4,7 +4,7 @@
 
 class ResamplerTest : public ::testing::Test {
 protected:
-    plaits_vst::Resampler resampler_;
+    Resampler resampler_;
 };
 
 TEST_F(ResamplerTest, InitializesCorrectly) {

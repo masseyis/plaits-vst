@@ -26,7 +26,8 @@ public:
     void Process(float* leftOutput, float* rightOutput, size_t size);
 
     // Setters for parameters
-    void set_engine(int engine) { engine_ = engine; }
+    // Maps UI engine index (0-15) to internal Plaits engine index
+    void set_engine(int engine) { engine_ = mapEngineIndex(engine); }
     void set_harmonics(float harmonics) { harmonics_ = harmonics; }
     void set_timbre(float timbre) { timbre_ = timbre; }
     void set_morph(float morph) { morph_ = morph; }
@@ -38,6 +39,13 @@ public:
     int note() const { return note_; }
 
 private:
+    // Maps UI engine selection (0-15) to actual Plaits engine index
+    // Plaits has 24 engines, we expose the classic 16 (indices 8-23)
+    static int mapEngineIndex(int uiEngine) {
+        // Classic Plaits engines start at index 8 in the engine registry
+        return uiEngine + 8;
+    }
+
     plaits::Voice plaitsVoice_;
     Envelope envelope_;
     Resampler resamplerOut_;

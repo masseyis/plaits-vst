@@ -7,7 +7,7 @@ protected:
         env_.Init(44100.0);
     }
 
-    plaits_vst::Envelope env_;
+    Envelope env_;
 };
 
 TEST_F(EnvelopeTest, InitialState) {
@@ -89,7 +89,7 @@ TEST_F(EnvelopeTest, ZeroAttackStartsAtPeak) {
 }
 
 TEST_F(EnvelopeTest, LongDecayTakesLonger) {
-    plaits_vst::Envelope shortEnv, longEnv;
+    Envelope shortEnv, longEnv;
     shortEnv.Init(44100.0);
     longEnv.Init(44100.0);
 

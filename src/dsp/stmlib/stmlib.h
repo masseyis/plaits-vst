@@ -75,11 +75,11 @@ namespace impl {
 } // namespace impl
 
 
-#ifndef TEST
+#ifndef STMLIB_X86
 #define IN_RAM __attribute__ ((section (".ramtext")))
 #else
 #define IN_RAM
-#endif  // TEST
+#endif  // STMLIB_X86
 
 #define UNROLL2(x) x; x;
 #define UNROLL4(x) x; x; x; x;

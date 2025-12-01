@@ -59,5 +59,11 @@ private:
         "MODAL", "B.DRUM", "SNARE", "HI-HAT"
     };
 
+    // Dynamic parameter labels per engine [engine][0=harmonics, 1=timbre, 2=morph]
+    static const char* const kEngineParamLabels[16][3];
+
+    // Get dynamic label for a row based on current engine
+    const char* getDynamicLabel(int row) const;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlaitsVSTEditor)
 };

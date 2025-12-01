@@ -1,6 +1,43 @@
 #include "PluginEditor.h"
 #include "PresetManager.h"
 
+// Dynamic parameter labels per engine [engine][0=harmonics, 1=timbre, 2=morph]
+// Short labels that fit in the UI (max ~10 chars)
+const char* const PlaitsVSTEditor::kEngineParamLabels[16][3] = {
+    // 0: VA (Virtual Analog)
+    {"DETUNE", "SQUARE", "SAW"},
+    // 1: Waveshaper
+    {"WAVEFORM", "FOLD", "ASYMMETRY"},
+    // 2: FM (Phase Modulation)
+    {"RATIO", "MOD INDEX", "FEEDBACK"},
+    // 3: Grain (Formant)
+    {"FORMANT 2", "FORMANT", "WIDTH"},
+    // 4: Additive
+    {"BUMPS", "HARMONIC", "SHAPE"},
+    // 5: Wavetable
+    {"BANK", "ROW", "COLUMN"},
+    // 6: Chord
+    {"CHORD", "INVERSION", "WAVEFORM"},
+    // 7: Speech
+    {"TYPE", "SPECIES", "PHONEME"},
+    // 8: Swarm (Granular)
+    {"PITCH RND", "DENSITY", "OVERLAP"},
+    // 9: Noise (Filtered)
+    {"FILTER", "CLOCK", "RESONANCE"},
+    // 10: Particle (Dust)
+    {"FREQ RND", "DENSITY", "REVERB"},
+    // 11: String
+    {"INHARM", "EXCITER", "DECAY"},
+    // 12: Modal
+    {"MATERIAL", "EXCITER", "DECAY"},
+    // 13: Bass Drum
+    {"ATTACK", "TONE", "DECAY"},
+    // 14: Snare
+    {"NOISE", "MODES", "DECAY"},
+    // 15: Hi-Hat
+    {"METAL", "HIGHPASS", "DECAY"},
+};
+
 // Row configuration: label, type, min, max, smallStep, largeStep, suffix
 const PlaitsVSTEditor::RowConfig PlaitsVSTEditor::kRowConfigs[kNumRows] = {
     {"PRESET",    RowType::Preset,    0,   0,    1,   1,  ""},   // min/max set dynamically
@@ -168,6 +205,26 @@ float PlaitsVSTEditor::normalizedValue(int row) const
     return static_cast<float>(value - cfg.minVal) / static_cast<float>(cfg.maxVal - cfg.minVal);
 }
 
+const char* PlaitsVSTEditor::getDynamicLabel(int row) const
+{
+    const auto& cfg = kRowConfigs[row];
+
+    // Only Harmonics, Timbre, and Morph have dynamic labels
+    if (cfg.type != RowType::Harmonics && cfg.type != RowType::Timbre && cfg.type != RowType::Morph) {
+        return cfg.label;
+    }
+
+    int engine = processor_.getEngineParam()->getIndex();
+    engine = juce::jlimit(0, 15, engine);
+
+    int paramIndex = 0;
+    if (cfg.type == RowType::Harmonics) paramIndex = 0;
+    else if (cfg.type == RowType::Timbre) paramIndex = 1;
+    else if (cfg.type == RowType::Morph) paramIndex = 2;
+
+    return kEngineParamLabels[engine][paramIndex];
+}
+
 void PlaitsVSTEditor::adjustValue(int row, int delta)
 {
     int current = getDisplayValue(row);
@@ -215,9 +272,10 @@ void PlaitsVSTEditor::paint(juce::Graphics& g)
         g.setColour(selected ? kBarSelectedColor : kBarColor);
         g.fillRect(rowRect.getX(), rowRect.getY(), barWidth, rowRect.getHeight());
 
-        // Label
+        // Label (dynamic for Harmonics/Timbre/Morph based on engine)
         g.setColour(selected ? kTextSelectedColor : kTextColor);
-        g.drawText(cfg.label, rowRect.getX() + 4, rowRect.getY(),
+        const char* label = getDynamicLabel(i);
+        g.drawText(label, rowRect.getX() + 4, rowRect.getY(),
                    kLabelWidth, rowRect.getHeight(), juce::Justification::centredLeft);
 
         // Value

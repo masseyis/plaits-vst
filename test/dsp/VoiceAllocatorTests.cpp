@@ -9,23 +9,23 @@ protected:
         allocator_.Init(44100.0, 8);
     }
 
-    plaits_vst::VoiceAllocator allocator_;
+    VoiceAllocator allocator_;
 };
 
 TEST_F(VoiceAllocatorTest, InitialState) {
-    EXPECT_EQ(allocator_.getActiveVoiceCount(), 0);
+    EXPECT_EQ(allocator_.activeVoiceCount(), 0);
 }
 
 TEST_F(VoiceAllocatorTest, NoteOnAllocatesVoice) {
     allocator_.NoteOn(60, 1.0f, 10.0f, 100.0f);
-    EXPECT_EQ(allocator_.getActiveVoiceCount(), 1);
+    EXPECT_EQ(allocator_.activeVoiceCount(), 1);
 }
 
 TEST_F(VoiceAllocatorTest, MultipleNotesAllocateMultipleVoices) {
     allocator_.NoteOn(60, 1.0f, 10.0f, 100.0f);
     allocator_.NoteOn(64, 1.0f, 10.0f, 100.0f);
     allocator_.NoteOn(67, 1.0f, 10.0f, 100.0f);
-    EXPECT_EQ(allocator_.getActiveVoiceCount(), 3);
+    EXPECT_EQ(allocator_.activeVoiceCount(), 3);
 }
 
 TEST_F(VoiceAllocatorTest, NoteOffReleasesVoice) {
@@ -38,7 +38,7 @@ TEST_F(VoiceAllocatorTest, NoteOffReleasesVoice) {
         allocator_.Process(left, right, 4096);
     }
 
-    EXPECT_EQ(allocator_.getActiveVoiceCount(), 0);
+    EXPECT_EQ(allocator_.activeVoiceCount(), 0);
 }
 
 TEST_F(VoiceAllocatorTest, AllNotesOffReleasesAll) {
@@ -53,7 +53,7 @@ TEST_F(VoiceAllocatorTest, AllNotesOffReleasesAll) {
         allocator_.Process(left, right, 4096);
     }
 
-    EXPECT_EQ(allocator_.getActiveVoiceCount(), 0);
+    EXPECT_EQ(allocator_.activeVoiceCount(), 0);
 }
 
 TEST_F(VoiceAllocatorTest, RespectsPolyphonyLimit) {
@@ -64,7 +64,7 @@ TEST_F(VoiceAllocatorTest, RespectsPolyphonyLimit) {
         allocator_.NoteOn(60 + i, 1.0f, 10.0f, 1000.0f);
     }
 
-    EXPECT_LE(allocator_.getActiveVoiceCount(), 4);
+    EXPECT_LE(allocator_.activeVoiceCount(), 4);
 }
 
 TEST_F(VoiceAllocatorTest, VoiceStealingWorks) {
@@ -79,7 +79,7 @@ TEST_F(VoiceAllocatorTest, VoiceStealingWorks) {
     // Play a 5th note - should steal oldest
     allocator_.NoteOn(76, 1.0f, 10.0f, 1000.0f);
 
-    EXPECT_LE(allocator_.getActiveVoiceCount(), 4);
+    EXPECT_LE(allocator_.activeVoiceCount(), 4);
 }
 
 TEST_F(VoiceAllocatorTest, ProcessProducesOutput) {
@@ -148,20 +148,20 @@ TEST_F(VoiceAllocatorTest, EngineParameterAffectsAllVoices) {
 
 TEST_F(VoiceAllocatorTest, PolyphonyCanBeChanged) {
     allocator_.setPolyphony(2);
-    EXPECT_EQ(allocator_.getActiveVoiceCount(), 0);
+    EXPECT_EQ(allocator_.activeVoiceCount(), 0);
 
     allocator_.NoteOn(60, 1.0f, 10.0f, 1000.0f);
     allocator_.NoteOn(64, 1.0f, 10.0f, 1000.0f);
     allocator_.NoteOn(67, 1.0f, 10.0f, 1000.0f);
 
-    EXPECT_LE(allocator_.getActiveVoiceCount(), 2);
+    EXPECT_LE(allocator_.activeVoiceCount(), 2);
 
     // Increase polyphony
     allocator_.setPolyphony(8);
 
     // New notes should now be able to allocate
     allocator_.NoteOn(72, 1.0f, 10.0f, 1000.0f);
-    EXPECT_GE(allocator_.getActiveVoiceCount(), 1);
+    EXPECT_GE(allocator_.activeVoiceCount(), 1);
 }
 
 TEST_F(VoiceAllocatorTest, MultipleVoicesMix) {
@@ -191,13 +191,13 @@ TEST_F(VoiceAllocatorTest, MultipleVoicesMix) {
 
 TEST_F(VoiceAllocatorTest, SameNoteRetriggers) {
     allocator_.NoteOn(60, 1.0f, 10.0f, 1000.0f);
-    int initialCount = allocator_.getActiveVoiceCount();
+    int initialCount = allocator_.activeVoiceCount();
 
     // Play same note again
     allocator_.NoteOn(60, 1.0f, 10.0f, 1000.0f);
 
     // Should still only have one voice for this note (or steal and reallocate)
-    EXPECT_LE(allocator_.getActiveVoiceCount(), initialCount + 1);
+    EXPECT_LE(allocator_.activeVoiceCount(), initialCount + 1);
 }
 
 TEST_F(VoiceAllocatorTest, OutputIsNotNaNOrInf) {
