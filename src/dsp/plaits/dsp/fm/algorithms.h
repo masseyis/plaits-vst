@@ -195,6 +195,10 @@ class Algorithms {
   DISALLOW_COPY_AND_ASSIGN(Algorithms);
 };
 
+// Template specialization declarations - MSVC handles these differently
+// (it requires initialization in declarations), so we skip them for MSVC.
+// The definitions in algorithms.cc are sufficient.
+#ifndef _MSC_VER
 /* static */
 template<> const uint8_t Algorithms<4>::opcodes_[8][4];  // From DX100
 
@@ -206,6 +210,7 @@ template<> const uint8_t Algorithms<6>::opcodes_[32][6];  // From DX7
 
 /* static */
 template<> const Algorithms<6>::RendererSpecs Algorithms<6>::renderers_[9];
+#endif  // _MSC_VER
 
 }  // namespace fm
 
