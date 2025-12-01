@@ -90,6 +90,12 @@ PlaitsVST is released under the MIT License.
 
 The original Plaits firmware by Emilie Gillet (Mutable Instruments) is also MIT licensed.
 
+## Support
+
+If you find this plugin useful, consider supporting development:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/masseyis)
+
 ## Credits
 
 - Original Plaits design and DSP code: [Emilie Gillet / Mutable Instruments](https://github.com/pichenettes/eurorack)
