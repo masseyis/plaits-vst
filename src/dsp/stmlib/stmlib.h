@@ -28,6 +28,17 @@
 #include <inttypes.h>
 #include <stddef.h>
 
+// MSVC compatibility
+#ifdef _MSC_VER
+  #define _USE_MATH_DEFINES
+  #include <cmath>
+  #ifndef M_PI
+    #define M_PI 3.14159265358979323846
+  #endif
+  // MSVC doesn't support __attribute__, define it away
+  #define __attribute__(x)
+#endif
+
 #ifndef NULL
 #define NULL 0
 #endif
