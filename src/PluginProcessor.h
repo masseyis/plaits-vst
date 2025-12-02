@@ -2,6 +2,8 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "dsp/voice_allocator.h"
+#include "dsp/modulation_matrix.h"
+#include "dsp/moog_filter.h"
 
 class PresetManager;
 
@@ -42,14 +44,58 @@ public:
     juce::AudioParameterFloat* getDecayParam() { return decayParam_; }
     juce::AudioParameterInt* getPolyphonyParam() { return polyphonyParam_; }
 
+    // Filter params
+    juce::AudioParameterFloat* getCutoffParam() { return cutoffParam_; }
+    juce::AudioParameterFloat* getResonanceParam() { return resonanceParam_; }
+
+    // LFO1 params
+    juce::AudioParameterChoice* getLfo1RateParam() { return lfo1RateParam_; }
+    juce::AudioParameterChoice* getLfo1ShapeParam() { return lfo1ShapeParam_; }
+    juce::AudioParameterChoice* getLfo1DestParam() { return lfo1DestParam_; }
+    juce::AudioParameterInt* getLfo1AmountParam() { return lfo1AmountParam_; }
+
+    // LFO2 params
+    juce::AudioParameterChoice* getLfo2RateParam() { return lfo2RateParam_; }
+    juce::AudioParameterChoice* getLfo2ShapeParam() { return lfo2ShapeParam_; }
+    juce::AudioParameterChoice* getLfo2DestParam() { return lfo2DestParam_; }
+    juce::AudioParameterInt* getLfo2AmountParam() { return lfo2AmountParam_; }
+
+    // ENV1 params
+    juce::AudioParameterFloat* getEnv1AttackParam() { return env1AttackParam_; }
+    juce::AudioParameterFloat* getEnv1DecayParam() { return env1DecayParam_; }
+    juce::AudioParameterChoice* getEnv1DestParam() { return env1DestParam_; }
+    juce::AudioParameterInt* getEnv1AmountParam() { return env1AmountParam_; }
+
+    // ENV2 params
+    juce::AudioParameterFloat* getEnv2AttackParam() { return env2AttackParam_; }
+    juce::AudioParameterFloat* getEnv2DecayParam() { return env2DecayParam_; }
+    juce::AudioParameterChoice* getEnv2DestParam() { return env2DestParam_; }
+    juce::AudioParameterInt* getEnv2AmountParam() { return env2AmountParam_; }
+
+    // Modulation matrix access for UI visualization
+    const plaits::ModulationMatrix& getModMatrix() const { return modMatrix_; }
+
+    // Get current modulated values (for UI visualization)
+    float getModulatedHarmonics() const;
+    float getModulatedTimbre() const;
+    float getModulatedMorph() const;
+    float getModulatedCutoff() const;
+    float getModulatedResonance() const;
+
     // Preset manager
     PresetManager& getPresetManager();
 
 private:
     void handleMidiMessage(const juce::MidiMessage& msg);
+    void updateModulationParams();
 
     VoiceAllocator voiceAllocator_;
     double hostSampleRate_ = 44100.0;
+
+    // Modulation system
+    plaits::ModulationMatrix modMatrix_;
+    plaits::MoogFilter filter_;
+    int activeVoiceCount_ = 0;
 
     // Parameters
     juce::AudioParameterChoice* engineParam_ = nullptr;
@@ -59,6 +105,34 @@ private:
     juce::AudioParameterFloat* attackParam_ = nullptr;
     juce::AudioParameterFloat* decayParam_ = nullptr;
     juce::AudioParameterInt* polyphonyParam_ = nullptr;
+
+    // Filter params
+    juce::AudioParameterFloat* cutoffParam_ = nullptr;
+    juce::AudioParameterFloat* resonanceParam_ = nullptr;
+
+    // LFO1 params
+    juce::AudioParameterChoice* lfo1RateParam_ = nullptr;
+    juce::AudioParameterChoice* lfo1ShapeParam_ = nullptr;
+    juce::AudioParameterChoice* lfo1DestParam_ = nullptr;
+    juce::AudioParameterInt* lfo1AmountParam_ = nullptr;
+
+    // LFO2 params
+    juce::AudioParameterChoice* lfo2RateParam_ = nullptr;
+    juce::AudioParameterChoice* lfo2ShapeParam_ = nullptr;
+    juce::AudioParameterChoice* lfo2DestParam_ = nullptr;
+    juce::AudioParameterInt* lfo2AmountParam_ = nullptr;
+
+    // ENV1 params
+    juce::AudioParameterFloat* env1AttackParam_ = nullptr;
+    juce::AudioParameterFloat* env1DecayParam_ = nullptr;
+    juce::AudioParameterChoice* env1DestParam_ = nullptr;
+    juce::AudioParameterInt* env1AmountParam_ = nullptr;
+
+    // ENV2 params
+    juce::AudioParameterFloat* env2AttackParam_ = nullptr;
+    juce::AudioParameterFloat* env2DecayParam_ = nullptr;
+    juce::AudioParameterChoice* env2DestParam_ = nullptr;
+    juce::AudioParameterInt* env2AmountParam_ = nullptr;
 
     // Preset manager
     std::unique_ptr<PresetManager> presetManager_;

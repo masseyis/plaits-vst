@@ -72,7 +72,11 @@ target_sources(PlaitsVST PRIVATE
     src/dsp/envelope.cpp
     src/dsp/resampler.cpp
     src/dsp/voice.cpp
-    src/dsp/voice_allocator.cpp)
+    src/dsp/voice_allocator.cpp
+    src/dsp/lfo.cpp
+    src/dsp/mod_envelope.cpp
+    src/dsp/modulation_matrix.cpp
+    src/dsp/moog_filter.cpp)
 
 target_include_directories(PlaitsVST PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -110,6 +114,10 @@ add_executable(PlaitsVSTTests
     test/dsp/EnvelopeTests.cpp
     test/dsp/ResamplerTests.cpp
     test/dsp/PlaitsEngineTests.cpp
+    test/dsp/LfoTests.cpp
+    test/dsp/ModEnvelopeTests.cpp
+    test/dsp/ModulationMatrixTests.cpp
+    test/dsp/MoogFilterTests.cpp
     src/dsp/stmlib/dsp/units.cc
     src/dsp/stmlib/utils/random.cc
     src/dsp/plaits/resources.cc
@@ -152,7 +160,11 @@ add_executable(PlaitsVSTTests
     src/dsp/envelope.cpp
     src/dsp/resampler.cpp
     src/dsp/voice.cpp
-    src/dsp/voice_allocator.cpp)
+    src/dsp/voice_allocator.cpp
+    src/dsp/lfo.cpp
+    src/dsp/mod_envelope.cpp
+    src/dsp/modulation_matrix.cpp
+    src/dsp/moog_filter.cpp)
 
 target_include_directories(PlaitsVSTTests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
