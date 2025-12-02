@@ -87,6 +87,14 @@ Each modulation source (LFO1, LFO2, ENV1, ENV2) can target:
 - **Cutoff/Resonance** - Filter parameters
 - **LFO Rate/Amount** - Cross-modulation (LFOs can modulate each other)
 
+## Support
+
+If you find PlaitsVST useful, consider supporting development:
+
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Me-ff5f5f?logo=ko-fi&logoColor=white)](https://ko-fi.com/masseyis)
+
+[Buy me a coffee on Ko-fi](https://ko-fi.com/masseyis)
+
 ## Source Code
 
 PlaitsVST is open source. View the code on [GitHub](https://github.com/masseyis/plaits-vst).
